@@ -3,8 +3,8 @@ package com.study.springbootapp.enumerators;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Sexo{
-        MASCULINO("Masculino"),
-        FEMININO("Feminino");
+        Masculino("Masculino"),
+        Feminino("Feminino");
         private final String valor;
 
         // Construtor para atribuir o valor ao campo
@@ -15,7 +15,7 @@ public enum Sexo{
         // Método para encontrar um enum com base no valor
         public static Sexo fromValor(String valor) {
             for (Sexo sexo : Sexo.values()) {
-                if (sexo.getValor().equals(valor)) {
+                if (sexo.getValor().equalsIgnoreCase(valor)) {
                     return sexo;
                 }
             }

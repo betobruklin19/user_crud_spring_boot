@@ -16,7 +16,7 @@ public class Users implements Serializable {
     @Column(nullable = false, length = 100)
     private String nome;
     private String email;
-    @Column(nullable = false, length = 11, unique = true)
+    @Column(nullable = false, length = 14, unique = true)
     private String cpf;
     @Column(nullable = false, length = 2)
     private int idade;
