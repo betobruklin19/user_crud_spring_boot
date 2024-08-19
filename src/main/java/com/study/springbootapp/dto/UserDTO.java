@@ -14,7 +14,6 @@ public class UserDTO {
     @NotBlank
     private String email;
     @NotNull
-    @UniqueElements
     private String cpf;
     @NotNull
     private int idade;

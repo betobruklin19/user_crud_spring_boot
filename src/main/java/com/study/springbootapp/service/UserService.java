@@ -69,6 +69,11 @@ public class UserService {
         return new UserDTO(updatedUser);
     }
 
+    public void atualizarMultiplosUsuarios(List<UserDTO> userDTOs) {
+        for (UserDTO userDTO : userDTOs) {
+            atualizarUsuario(userDTO.getId(), userDTO);
+        }
+    }
     public UserDTO removerUsuario(Long id) {
         Users user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Usuário(a) não encontrado(a) com id " + id));
         userRepository.deleteById(id);
