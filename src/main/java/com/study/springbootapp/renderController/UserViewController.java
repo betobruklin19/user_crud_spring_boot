@@ -54,7 +54,7 @@ public class UserViewController {
             return "redirect:/user/list";
         }
 
-        return action;
+        return "redirect:/user/list";
     }
     @GetMapping("/edit/{id}")
     public String editarUsuario(@PathVariable("id") Long id, Model model) {
