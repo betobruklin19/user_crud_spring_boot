@@ -1,0 +1,31 @@
+<style>
+        .card {
+            border: 1px solid #ddd; /* Adiciona uma borda ao card */
+        }
+
+        .card-header-large {
+            font-size: 2.5rem; /* Aumenta ainda mais o tamanho da fonte */
+            padding: 1rem 1rem; /* Reduz o padding para aumentar o tamanho do cabeçalho */
+            text-align: center; /* Centraliza o texto */
+            margin-bottom: 0; /* Remove a margem inferior */
+        }
+
+        .card-body {
+            padding: 1.5rem; /* Ajusta o padding do corpo do card */
+        }
+
+        .container {
+            padding-left: 0; /* Remove o padding à esquerda da container */
+            padding-right: 0; /* Remove o padding à direita da container */
+        }
+
+        .row {
+            margin-left: 0; /* Remove o padding à esquerda da linha */
+            margin-right: 0; /* Remove o padding à direita da linha */
+        }
+
+        .col-md-8 {
+            padding-left: 0; /* Remove o padding à esquerda da coluna */
+            padding-right: 0; /* Remove o padding à direita da coluna */
+        }
+    </style>
