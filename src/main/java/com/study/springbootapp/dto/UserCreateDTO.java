@@ -12,7 +12,6 @@ public class UserCreateDTO {
     private String nome;
     private String email;
     @NotBlank
-    @UniqueElements
     private String cpf;
     @NotNull
     private int idade;
