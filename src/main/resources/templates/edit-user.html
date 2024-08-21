@@ -10,7 +10,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10"> <!-- Aumenta a largura do card para 10 colunas -->
             <div class="card">
-                <h1 class="card-header card-header-large">Editar Usuário</h1>
+                <h1 class="card-header card-header-large bg-secondary text-white">Editar Usuário</h1>
                 <div class="card-body">
                     <form th:action="@{/user/edit}" th:object="${userDTO}" method="post">
                         <input type="hidden" th:field="*{id}"/>
