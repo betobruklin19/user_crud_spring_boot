@@ -10,6 +10,8 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -43,18 +45,25 @@ public class UserService {
             throw new UserNotFoundException("Erro ao tentar salvar o usuário: " + e.getMessage());
         }
     }
-    public List<UserDTO> obterTodosUsuarios(){
+    public Page<UserDTO> obterTodosUsuarios(Pageable pageable){
         try {
-            List<Users> users = userRepository.findAll();
-            return  users.stream()
-                    .map(user -> new UserDTO(user)) // Converte cada Users para UserDTO
-                    .collect(Collectors.toList()); // Coleta o resultado em uma lista
+            Page<Users> userPage = userRepository.findAll(pageable);
+            return userPage.map(UserDTO::new); // Converte cada Users para UserDTO
+//            return  users.stream()
+//                    .map(user -> new UserDTO(user)) // Converte cada Users para UserDTO
+//                    .collect(Collectors.toList()); // Coleta o resultado em uma lista
         }catch (UserNotFoundException ex){
             throw new UserNotFoundException("Não existem usuários cadastrados");
         }
     }
+
+    public Page<UserDTO> buscarUsuarios(String query, Pageable pageable) {
+        Page<Users> userPage = userRepository.findByNomeContainingIgnoreCase(query, pageable);
+        return userPage.map(UserDTO::new);
+    }
+
     public UserDTO obterUsuarioPorId (Long id){
-        Users user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Nao existe usuário com id " + id + " cadastrado."));
+        Users user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Não existe usuário com id \"" + id + "\" cadastrado."));
         return new UserDTO(user);
     }
 

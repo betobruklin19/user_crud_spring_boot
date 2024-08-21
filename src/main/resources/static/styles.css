@@ -28,4 +28,18 @@
             padding-left: 0; /* Remove o padding à esquerda da coluna */
             padding-right: 0; /* Remove o padding à direita da coluna */
         }
+
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem; /* Ajusta o tamanho dos ícones */
+            padding: 0.5rem; /* Adiciona algum espaçamento ao redor do ícone */
+            margin: 0.25rem; /* Adiciona um pequeno espaçamento entre ícones */
+        }
+
+        .btn-home {
+            margin-left: 10px; /* Ajuste o valor conforme necessário */
+        }
+
     </style>

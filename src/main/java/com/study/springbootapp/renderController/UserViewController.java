@@ -2,9 +2,11 @@ package com.study.springbootapp.renderController;
 
 import com.study.springbootapp.dto.UserCreateDTO;
 import com.study.springbootapp.dto.UserDTO;
+import com.study.springbootapp.exceptions.UserNotFoundException;
 import com.study.springbootapp.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,11 +22,74 @@ public class UserViewController {
     UserService userService;
 
     @GetMapping("/list")
-    public String listarTodosUsuarios(Model model) {
-        List<UserDTO> users = userService.obterTodosUsuarios();
-        model.addAttribute("users", users);
+    public String listarTodosUsuarios(@RequestParam(value = "page", defaultValue = "0") int page,
+                                      @RequestParam(value = "size", defaultValue = "5") int size,
+                                      @RequestParam(value = "query", required = false) String query,
+                                      Model model,
+                                      @RequestHeader(value = "X-Requested-With", required = false) String requestedWith) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<UserDTO> userPage;
+
+        try {
+            if (query == null || query.isEmpty()) {
+                userPage = userService.obterTodosUsuarios(pageable);
+            } else {
+                if (query.matches("\\d+")) { // Busca por ID
+                    Long id = Long.parseLong(query);
+                    UserDTO userDTO = userService.obterUsuarioPorId(id);
+                    userPage = new PageImpl<>(List.of(userDTO), pageable, 1);
+                } else { // Busca por nome
+                    userPage = userService.buscarUsuarios(query, pageable);
+                }
+            }
+        } catch (UserNotFoundException ex) {
+            // Adiciona mensagem de erro ao modelo
+            model.addAttribute("errorMessage", ex.getMessage());
+            userPage = Page.empty(); // Retorna uma página vazia para evitar erros de renderização
+        }
+
+        model.addAttribute("userPage", userPage);
+        model.addAttribute("query", query);
+
+        // Verifica se a requisição é AJAX
+        if ("XMLHttpRequest".equals(requestedWith)) {
+            return "fragments/userTable :: userTableBody";
+        }
+
         return "list-users";
     }
+
+//    @GetMapping("/search")
+//    public String buscarUsuarios(@RequestParam(value = "query", required = false) String query,
+//                                 @RequestParam(value = "page", defaultValue = "0") int page,
+//                                 @RequestParam(value = "size", defaultValue = "5") int size,
+//                                 Model model,
+//                                 @RequestHeader(value = "X-Requested-With", required = false) String requestedWith) {
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+//        Page<UserDTO> userPage;
+//
+//        if (query == null || query.isEmpty()) {
+//            userPage = userService.obterTodosUsuarios(pageable);
+//        } else {
+//            if (query.matches("\\d+")) { // Busca por ID
+//                Long id = Long.parseLong(query);
+//                UserDTO userDTO = userService.obterUsuarioPorId(id);
+//                userPage = new PageImpl<>(List.of(userDTO), pageable, 1);
+//            } else { // Busca por nome
+//                userPage = userService.buscarUsuarios(query, pageable);
+//            }
+//        }
+//
+//        model.addAttribute("userPage", userPage);
+//        model.addAttribute("query", query);
+//
+//        // Verifica se a requisição é AJAX
+//        if ("XMLHttpRequest".equals(requestedWith)) {
+//            return "fragments/userTable :: userTableBody";
+//        }
+//
+//        return "list-users";
+//    }
 
     @GetMapping("/create")
     public String criarNovoUsuario(Model model) {

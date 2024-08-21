@@ -7,8 +7,10 @@ import com.study.springbootapp.model.Users;
 import com.study.springbootapp.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,38 +33,62 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDTO>> listarTodosUsuarios (){
-        var users = userService.obterTodosUsuarios();
-        return ResponseEntity.ok(users);
+//    @GetMapping("/list")
+//    public ResponseEntity<Page<UserDTO>> listarTodosUsuarios(@RequestParam(value = "page", defaultValue = "0") int page,
+//                                                             @RequestParam(value = "size", defaultValue = "5") int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        var users = userService.obterTodosUsuarios(pageable);
+//        return ResponseEntity.ok(users);
+//    }
+
+    @GetMapping("/list")
+    public ResponseEntity<Page<UserDTO>> listarTodosUsuarios(@RequestParam(value = "query", required = false) String query,
+                                                        @RequestParam(value = "page", defaultValue = "0") int page,
+                                                        @RequestParam(value = "size", defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<UserDTO> userPage;
+
+        if (query == null || query.isEmpty()) {
+            userPage = userService.obterTodosUsuarios(pageable);
+        } else {
+            if (query.matches("\\d+")) { // Busca por ID
+                Long id = Long.parseLong(query);
+                UserDTO userDTO = userService.obterUsuarioPorId(id);
+                userPage = new PageImpl<>(List.of(userDTO), pageable, 1);
+            } else { // Busca por nome
+                userPage = userService.buscarUsuarios(query, pageable);
+            }
+        }
+        return ResponseEntity.ok(userPage);
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<Object> obterUsuarioPorId (@PathVariable("id") Long id){
+    public ResponseEntity<Object> obterUsuarioPorId(@PathVariable("id") Long id) {
         try {
             UserDTO userDTO = userService.obterUsuarioPorId(id);
             return ResponseEntity.ok(userDTO);
-        }catch (UserNotFoundException ex){
+        } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> atualizarUsuario(@PathVariable("id") Long id, @RequestBody @Valid UserDTO userDTO){
+    public ResponseEntity<Object> atualizarUsuario(@PathVariable("id") Long id, @RequestBody @Valid UserDTO userDTO) {
         try {
-           var updateUser = userService.atualizarUsuario(id, userDTO);
-           return ResponseEntity.ok(updateUser);
+            var updateUser = userService.atualizarUsuario(id, userDTO);
+            return ResponseEntity.ok(updateUser);
         } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> removerUsuario (@PathVariable("id") Long id){
-        try{
+    public ResponseEntity<String> removerUsuario(@PathVariable("id") Long id) {
+        try {
             UserDTO userDTO = userService.removerUsuario(id);
             return ResponseEntity.status(HttpStatus.OK).body("Usuário(a) \"" + (userDTO.getNome() + "\" removido(a) do sistema."));
-        }catch (UserNotFoundException ex){
+        } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
