@@ -59,37 +59,33 @@ public class UserViewController {
         return "list-users";
     }
 
-//    @GetMapping("/search")
-//    public String buscarUsuarios(@RequestParam(value = "query", required = false) String query,
-//                                 @RequestParam(value = "page", defaultValue = "0") int page,
-//                                 @RequestParam(value = "size", defaultValue = "5") int size,
-//                                 Model model,
-//                                 @RequestHeader(value = "X-Requested-With", required = false) String requestedWith) {
-//        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-//        Page<UserDTO> userPage;
-//
-//        if (query == null || query.isEmpty()) {
-//            userPage = userService.obterTodosUsuarios(pageable);
-//        } else {
-//            if (query.matches("\\d+")) { // Busca por ID
-//                Long id = Long.parseLong(query);
-//                UserDTO userDTO = userService.obterUsuarioPorId(id);
-//                userPage = new PageImpl<>(List.of(userDTO), pageable, 1);
-//            } else { // Busca por nome
-//                userPage = userService.buscarUsuarios(query, pageable);
-//            }
-//        }
-//
-//        model.addAttribute("userPage", userPage);
-//        model.addAttribute("query", query);
-//
+    @GetMapping("/search")
+    public String buscarUsuarios(@RequestParam(value = "query", required = false) String query,
+                                 @RequestParam(value = "page", defaultValue = "0") int page,
+                                 @RequestParam(value = "size", defaultValue = "5") int size,
+                                 Model model,
+                                 @RequestHeader(value = "X-Requested-With", required = false) String requestedWith) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<UserDTO> userPage;
+
+        if (query == null || query.isEmpty()) {
+            userPage = userService.obterTodosUsuarios(pageable);
+        } else {
+            // Busca por nome
+            userPage = userService.buscarUsuarios(query, pageable);
+        }
+
+
+        model.addAttribute("userPage", userPage);
+        model.addAttribute("query", query);
+
 //        // Verifica se a requisição é AJAX
 //        if ("XMLHttpRequest".equals(requestedWith)) {
 //            return "fragments/userTable :: userTableBody";
 //        }
-//
-//        return "list-users";
-//    }
+
+        return "list-users";
+    }
 
     @GetMapping("/create")
     public String criarNovoUsuario(Model model) {

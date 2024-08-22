@@ -1,4 +1,21 @@
 <style>
+        /*body {
+                    background: url('/images/taras-shypka-iFSvn82XfGo-unsplash.jpg') no-repeat center center fixed;
+                    background-size: cover;
+                    color: #fff; *//* Ajuste a cor do texto se necessário *//*
+                    margin: 0;
+                    height: 100vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }*/
+
+                .container {
+                    background-color: rgba(255, 255, 255, 0.8); /* Cor de fundo semi-transparente */
+                    border-radius: 8px;
+                    padding: 20px;
+                }
+
         .card {
             border: 1px solid #ddd; /* Adiciona uma borda ao card */
         }

@@ -51,13 +51,8 @@ public class UserController {
         if (query == null || query.isEmpty()) {
             userPage = userService.obterTodosUsuarios(pageable);
         } else {
-            if (query.matches("\\d+")) { // Busca por ID
-                Long id = Long.parseLong(query);
-                UserDTO userDTO = userService.obterUsuarioPorId(id);
-                userPage = new PageImpl<>(List.of(userDTO), pageable, 1);
-            } else { // Busca por nome
-                userPage = userService.buscarUsuarios(query, pageable);
-            }
+            // Busca por nome
+            userPage = userService.buscarUsuarios(query, pageable);
         }
         return ResponseEntity.ok(userPage);
     }

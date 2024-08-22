@@ -8,23 +8,30 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> <!-- jQuery -->
 </head>
-<body>
+<body class="bg-light">
+<!--<img src="/images/taras-shypka-iFSvn82XfGo-unsplash.jpg" class="img-fluid" alt="Imagem responsiva">-->
 <div class="container mt-4">
     <div class="card">
         <h1 class="card-header bg-secondary text-white">Lista de Usuários</h1>
-        <div class="card-body">
+        <div class="card-body bg-light">
             <!-- Formulário de Busca -->
             <form th:action="@{/user/list}" method="get" class="mb-3">
                 <div class="input-group">
                     <input type="text" id="searchInput" name="query" class="form-control"
-                           placeholder="Buscar por nome ou ID" th:value="${query}">
-<!--                    <div class="input-group-append">-->
-                        <button class="btn btn-primary" type="submit">Buscar</button>
-                        <!-- Botão Home -->
-                        <a href="/user/list" class="btn btn-secondary ml-2">
-                            <i class="bi bi-house-door"></i>
-                        </a>
-<!--                    </div>-->
+                           placeholder="Digite aqui para buscar o usuário por nome" th:value="${query}">
+                    <!--                    <div class="input-group-append">-->
+                    <span class="input-group-text">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <!--                    <button class="btn btn-secondary" type="button" id="searchButton">-->
+                    <!--                        <i class="fas fa-search"></i> &lt;!&ndash; Ícone de lupa &ndash;&gt;-->
+                    <!--                    </button>-->
+                    <!--                        <button class="btn btn-primary" type="submit">Buscar</button>-->
+                    <!-- Botão Home -->
+                    <a href="/user/list" class="btn btn-secondary ml-2">
+                        <i class="bi bi-house-door"></i>
+                    </a>
+                    <!--                    </div>-->
                 </div>
             </form>
 
@@ -106,7 +113,7 @@
     </div>
 </div>
 <script src="/list-scripts.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
